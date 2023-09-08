@@ -1,0 +1,761 @@
+{
+	"info": {
+		"_postman_id": "b0506cba-e6de-49b6-b7aa-21650ddd2c5a",
+		"name": "CNC ZTP Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "594042"
+	},
+	"item": [
+		{
+			"name": "CNC-ZTP",
+			"item": [
+				{
+					"name": "RBB - Get Ticket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ticket\", responseBody);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/sso/v1/tickets?username=admin&password=Cisco123!",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"sso",
+								"v1",
+								"tickets"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin"
+								},
+								{
+									"key": "password",
+									"value": "Cisco123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RBB - Get Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token\", responseBody);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "no-cache"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "service",
+									"value": "https://198.18.201.25:30603/app-dashboard",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/sso/v1/tickets/{{ticket}}",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"sso",
+								"v1",
+								"tickets",
+								"{{ticket}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RBB - Available Images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/vnd.yang.data+json"
+							}
+						],
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/imagesvc/v1/images",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"imagesvc",
+								"v1",
+								"images"
+							]
+						},
+						"description": "Use this API Call to get the information about the hosted images on Crosswork."
+					},
+					"response": []
+				},
+				{
+					"name": "RBB - Available configuration Files",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/vnd.yang.data+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/configsvc/v1/configs/",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"configsvc",
+								"v1",
+								"configs",
+								""
+							]
+						},
+						"description": "Use this API Call to get the information about the available configuration files on Crosswork."
+					},
+					"response": []
+				},
+				{
+					"name": "RBB - Add a Device",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nodes\": [\n        {\n           \"hostName\": \"RBB.NCS540.12\",\n            \"serialNumber\": [\n                \"FOC2248N3LC\"\n            ],\n            \"credentialProfile\": \"rbb_lab\",\n            \"ipAddress\": {\n                \"inetAddressFamily\": \"IPV4\",\n                \"ipaddrs\": \"198.18.200.12\",\n                \"mask\": 24,\n                \"type\": \"DEVICEINFO\"\n            },\n            \"ipAddress\": {},\n            \"osPlatform\": \"IOS XR\",\n            \"profileName\": \"RBB.NCS540.12\",\n            \"status\": \"Unprovisioned\",\n            \"providerInfo\": {},\n            \"connectivityDetails\": [\n                {\n                    \"protocol\": \"SSH\",\n                    \"inetAddr\": [\n                        {\n                            \"inetAddressFamily\": \"IPV4\",\n                            \"ipaddrs\": \"198.18.200.12\",\n                            \"mask\": 24,\n                            \"type\": \"CONNECTIVITYINFO\"\n                        }\n                    ],\n                    \"port\": 22,\n                    \"timeout\": 60\n                },\n                {\n                    \"protocol\": \"NETCONF\",\n                    \"inetAddr\": [\n                        {\n                            \"inetAddressFamily\": \"IPV4\",\n                            \"ipaddrs\": \"198.18.200.12\",\n                            \"mask\": 24,\n                            \"type\": \"CONNECTIVITYINFO\"\n                        }\n                    ],\n                    \"port\": 830,\n                    \"timeout\": 60\n                }\n            ],\n            \"configName\": \"ZTP_Script_Py\",\n            \"additionalAttributes\": {\n                \"routingInfo.globalisissystemid\": \"\",\n                \"routingInfo.globalospfrouterid\": \"\",\n                \"routingInfo.teRouterid\": \"\"\n            },\n            \"isSecureZtp\": \"false\",\n            \"secureZtpInfo\": {\n                \"isEncrypted\": \"false\"\n            },\n            \"configAttributes\": {},\n            \"enableOption82\": \"false\"\n        }\n    ],\n    \"code\": 200\n}    "
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/ztp/v1/devices",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"ztp",
+								"v1",
+								"devices"
+							]
+						},
+						"description": "Use this API Call to Add a device on Crosswork for ZTP."
+					},
+					"response": [
+						{
+							"name": "A successful response.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/devices",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"devices"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"ztpnodes\": [\n  {\n   \"uuid\": \"<string>\",\n   \"hostName\": \"<string>\",\n   \"serialNumber\": \"<string>\",\n   \"credentialProfile\": \"<string>\",\n   \"ipAddress\": {\n    \"inetAddressFamily\": \"<string>\",\n    \"ipaddrs\": \"<string>\",\n    \"mask\": \"<integer>\",\n    \"type\": \"<string>\"\n   },\n   \"macAddress\": \"<string>\",\n   \"osPlatform\": \"<string>\",\n   \"deviceFamily\": \"<string>\",\n   \"image\": \"<string>\",\n   \"config\": \"<string>\",\n   \"version\": \"<string>\",\n   \"profileName\": \"<string>\",\n   \"status\": \"<string>\",\n   \"providerInfo\": {\n    \"providerName\": \"<string>\",\n    \"providerDeviceKey\": \"<string>\"\n   },\n   \"connectivityDetails\": [\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    },\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    }\n   ],\n   \"message\": \"<string>\",\n   \"lastUpdated\": \"<int64>\",\n   \"imageName\": \"<string>\",\n   \"configName\": \"<string>\",\n   \"isImageInvalid\": \"<boolean>\",\n   \"isConfigInvalid\": \"<boolean>\",\n   \"additionalAttributes\": \"<object>\",\n   \"inventoryId\": \"<string>\"\n  },\n  {\n   \"uuid\": \"<string>\",\n   \"hostName\": \"<string>\",\n   \"serialNumber\": \"<string>\",\n   \"credentialProfile\": \"<string>\",\n   \"ipAddress\": {\n    \"inetAddressFamily\": \"<string>\",\n    \"ipaddrs\": \"<string>\",\n    \"mask\": \"<integer>\",\n    \"type\": \"<string>\"\n   },\n   \"macAddress\": \"<string>\",\n   \"osPlatform\": \"<string>\",\n   \"deviceFamily\": \"<string>\",\n   \"image\": \"<string>\",\n   \"config\": \"<string>\",\n   \"version\": \"<string>\",\n   \"profileName\": \"<string>\",\n   \"status\": \"<string>\",\n   \"providerInfo\": {\n    \"providerName\": \"<string>\",\n    \"providerDeviceKey\": \"<string>\"\n   },\n   \"connectivityDetails\": [\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    },\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    }\n   ],\n   \"message\": \"<string>\",\n   \"lastUpdated\": \"<int64>\",\n   \"imageName\": \"<string>\",\n   \"configName\": \"<string>\",\n   \"isImageInvalid\": \"<boolean>\",\n   \"isConfigInvalid\": \"<boolean>\",\n   \"additionalAttributes\": \"<object>\",\n   \"inventoryId\": \"<string>\"\n  }\n ],\n \"code\": \"<integer>\",\n \"message\": \"<string>\",\n \"paginationDetails\": {\n  \"SortBy\": \"<string>\",\n  \"PageSize\": \"<long>\",\n  \"PageNum\": \"<long>\",\n  \"Descending\": \"<boolean>\",\n  \"MatchCase\": \"<boolean>\",\n  \"Criteria\": \"<string>\",\n  \"TotalCount\": \"<long>\"\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "RBB - Get Devices",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filter\": {\n    }\n}\n "
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/ztp/v1/devices/query",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"ztp",
+								"v1",
+								"devices",
+								"query"
+							]
+						},
+						"description": "Use this API to get the ZTP Device information from Crosswork"
+					},
+					"response": [
+						{
+							"name": "A successful response.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"filter\": {\n        \"uuid\": \"<string>\",\n        \"hostName\": \"<string>\",\n        \"serialNumber\": \"<string>\",\n        \"credentialProfile\": \"<string>\",\n        \"ipAddress\": {\n            \"inetAddressFamily\": \"<string>\",\n            \"ipaddrs\": \"<string>\",\n            \"mask\": \"<integer>\",\n            \"type\": \"<string>\"\n        },\n        \"macAddress\": \"<string>\",\n        \"osPlatform\": \"<string>\",\n        \"deviceFamily\": \"<string>\",\n        \"image\": \"<string>\",\n        \"config\": \"<string>\",\n        \"version\": \"<string>\",\n        \"profileName\": \"<string>\",\n        \"status\": \"<string>\",\n        \"providerInfo\": {\n            \"providerName\": \"<string>\",\n            \"providerDeviceKey\": \"<string>\"\n        },\n        \"connectivityDetails\": [\n            {\n                \"protocol\": \"<string>\",\n                \"inetAddr\": [\n                    {\n                        \"inetAddressFamily\": \"<string>\",\n                        \"ipaddrs\": \"<string>\",\n                        \"mask\": \"<integer>\",\n                        \"type\": \"<string>\"\n                    },\n                    {\n                        \"inetAddressFamily\": \"<string>\",\n                        \"ipaddrs\": \"<string>\",\n                        \"mask\": \"<integer>\",\n                        \"type\": \"<string>\"\n                    }\n                ],\n                \"port\": \"<long>\",\n                \"timeout\": \"<uint64>\"\n            },\n            {\n                \"protocol\": \"<string>\",\n                \"inetAddr\": [\n                    {\n                        \"inetAddressFamily\": \"<string>\",\n                        \"ipaddrs\": \"<string>\",\n                        \"mask\": \"<integer>\",\n                        \"type\": \"<string>\"\n                    },\n                    {\n                        \"inetAddressFamily\": \"<string>\",\n                        \"ipaddrs\": \"<string>\",\n                        \"mask\": \"<integer>\",\n                        \"type\": \"<string>\"\n                    }\n                ],\n                \"port\": \"<long>\",\n                \"timeout\": \"<uint64>\"\n            }\n        ],\n        \"message\": \"<string>\",\n        \"lastUpdated\": \"<int64>\",\n        \"imageName\": \"<string>\",\n        \"configName\": \"<string>\",\n        \"isImageInvalid\": \"<boolean>\",\n        \"isConfigInvalid\": \"<boolean>\",\n        \"additionalAttributes\": \"<object>\",\n        \"inventoryId\": \"<string>\"\n    },\n    \"filterData\": {\n        \"SortBy\": \"<string>\",\n        \"PageSize\": \"<long>\",\n        \"PageNum\": \"<long>\",\n        \"Descending\": \"<boolean>\",\n        \"MatchCase\": \"<boolean>\",\n        \"Criteria\": \"<string>\",\n        \"TotalCount\": \"<long>\"\n    },\n    \"criteria\": \"<string>\",\n    \"limit\": \"<integer>\",\n    \"page\": \"<integer>\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/devices/query",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"devices",
+										"query"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"ztpnodes\": [\n  {\n   \"uuid\": \"<string>\",\n   \"hostName\": \"<string>\",\n   \"serialNumber\": \"<string>\",\n   \"credentialProfile\": \"<string>\",\n   \"ipAddress\": {\n    \"inetAddressFamily\": \"<string>\",\n    \"ipaddrs\": \"<string>\",\n    \"mask\": \"<integer>\",\n    \"type\": \"<string>\"\n   },\n   \"macAddress\": \"<string>\",\n   \"osPlatform\": \"<string>\",\n   \"deviceFamily\": \"<string>\",\n   \"image\": \"<string>\",\n   \"config\": \"<string>\",\n   \"version\": \"<string>\",\n   \"profileName\": \"<string>\",\n   \"status\": \"<string>\",\n   \"providerInfo\": {\n    \"providerName\": \"<string>\",\n    \"providerDeviceKey\": \"<string>\"\n   },\n   \"connectivityDetails\": [\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    },\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    }\n   ],\n   \"message\": \"<string>\",\n   \"lastUpdated\": \"<int64>\",\n   \"imageName\": \"<string>\",\n   \"configName\": \"<string>\",\n   \"isImageInvalid\": \"<boolean>\",\n   \"isConfigInvalid\": \"<boolean>\",\n   \"additionalAttributes\": \"<object>\",\n   \"inventoryId\": \"<string>\"\n  },\n  {\n   \"uuid\": \"<string>\",\n   \"hostName\": \"<string>\",\n   \"serialNumber\": \"<string>\",\n   \"credentialProfile\": \"<string>\",\n   \"ipAddress\": {\n    \"inetAddressFamily\": \"<string>\",\n    \"ipaddrs\": \"<string>\",\n    \"mask\": \"<integer>\",\n    \"type\": \"<string>\"\n   },\n   \"macAddress\": \"<string>\",\n   \"osPlatform\": \"<string>\",\n   \"deviceFamily\": \"<string>\",\n   \"image\": \"<string>\",\n   \"config\": \"<string>\",\n   \"version\": \"<string>\",\n   \"profileName\": \"<string>\",\n   \"status\": \"<string>\",\n   \"providerInfo\": {\n    \"providerName\": \"<string>\",\n    \"providerDeviceKey\": \"<string>\"\n   },\n   \"connectivityDetails\": [\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    },\n    {\n     \"protocol\": \"<string>\",\n     \"inetAddr\": [\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      },\n      {\n       \"inetAddressFamily\": \"<string>\",\n       \"ipaddrs\": \"<string>\",\n       \"mask\": \"<integer>\",\n       \"type\": \"<string>\"\n      }\n     ],\n     \"port\": \"<long>\",\n     \"timeout\": \"<uint64>\"\n    }\n   ],\n   \"message\": \"<string>\",\n   \"lastUpdated\": \"<int64>\",\n   \"imageName\": \"<string>\",\n   \"configName\": \"<string>\",\n   \"isImageInvalid\": \"<boolean>\",\n   \"isConfigInvalid\": \"<boolean>\",\n   \"additionalAttributes\": \"<object>\",\n   \"inventoryId\": \"<string>\"\n  }\n ],\n \"code\": \"<integer>\",\n \"message\": \"<string>\",\n \"paginationDetails\": {\n  \"SortBy\": \"<string>\",\n  \"PageSize\": \"<long>\",\n  \"PageNum\": \"<long>\",\n  \"Descending\": \"<boolean>\",\n  \"MatchCase\": \"<boolean>\",\n  \"Criteria\": \"<string>\",\n  \"TotalCount\": \"<long>\"\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "RBB - Get Profiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/ztp/v1/profiles/query",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"ztp",
+								"v1",
+								"profiles",
+								"query"
+							]
+						},
+						"description": "Use this API Call to get the available ZTP related profile information on Crosswork System."
+					},
+					"response": [
+						{
+							"name": "A successful response.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/profiles/query",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"profiles",
+										"query"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"ztpProfiles\": [\n  {\n   \"profileId\": \"<string>\",\n   \"profileName\": \"<string>\",\n   \"profileDescription\": \"<string>\",\n   \"osPlatform\": \"<string>\",\n   \"deviceFamily\": \"<string>\",\n   \"version\": \"<string>\",\n   \"image\": \"<string>\",\n   \"config\": \"<string>\",\n   \"lastUpdated\": \"<int64>\",\n   \"imageName\": \"<string>\",\n   \"configName\": \"<string>\",\n   \"isImageInvalid\": \"<boolean>\",\n   \"isConfigInvalid\": \"<boolean>\"\n  },\n  {\n   \"profileId\": \"<string>\",\n   \"profileName\": \"<string>\",\n   \"profileDescription\": \"<string>\",\n   \"osPlatform\": \"<string>\",\n   \"deviceFamily\": \"<string>\",\n   \"version\": \"<string>\",\n   \"image\": \"<string>\",\n   \"config\": \"<string>\",\n   \"lastUpdated\": \"<int64>\",\n   \"imageName\": \"<string>\",\n   \"configName\": \"<string>\",\n   \"isImageInvalid\": \"<boolean>\",\n   \"isConfigInvalid\": \"<boolean>\"\n  }\n ],\n \"code\": \"<integer>\",\n \"message\": \"<string>\",\n \"paginationDetails\": {\n  \"SortBy\": \"<string>\",\n  \"PageSize\": \"<long>\",\n  \"PageNum\": \"<long>\",\n  \"Descending\": \"<boolean>\",\n  \"MatchCase\": \"<boolean>\",\n  \"Criteria\": \"<string>\",\n  \"TotalCount\": \"<long>\"\n }\n}"
+						}
+					]
+				},
+				{
+					"name": "RBB - Add Profiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n   \"profiles\":[\n\n      {\n\n         \"profileName\":\"RBB.NCS540.12\",\n         \"profileDescription\":\"Day0-Config\",\n         \"profileCategory\":\"RBB.NCS540.12\",\n         \"osPlatform\":\"IOS XR\",\n         \"deviceFamily\":\"CISCO NCS540\",\n         \"version\":\"7.7.2\",\n         \"image\":\"cw-image-uuid-dd00203f-f727-40b4-b38b-6df65757ec75\",\n         \"isSecureZtp\":\"false\",\n         \"profileCategory\": \"RBB.NCS540.12\",\n         \"preConfig\":\"\",\n         \"postConfig\":\"\",\n         \"config\":\"442dc784-0d72-4c43-aae4-385381204e32\"\n      }\n   ]\n\n}"
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/ztp/v1/profiles",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"ztp",
+								"v1",
+								"profiles"
+							]
+						},
+						"description": "Use this API call to add a profile(ZTP related) on Crosswork system."
+					},
+					"response": []
+				},
+				{
+					"name": "RBB - Add a Serial Number",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": [\r\n        {\r\n            \"serialNumber\": \"FOC2248N3LC\"\r\n        }\r\n        \r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/ztp/v1/serialnumbers",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"ztp",
+								"v1",
+								"serialnumbers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RBB - Get Serial Numbers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filter\": {\r\n    }\r\n}"
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/ztp/v1/serialnumbers/query",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"ztp",
+								"v1",
+								"serialnumbers",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-node.uuid Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/inventory/v1/nodes/query",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"inventory",
+								"v1",
+								"nodes",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get.CDG.vUUID Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/dg-manager/v1/dg/query",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"dg-manager",
+								"v1",
+								"dg",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put.node2cdg Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"dgDeviceMappings\": [\n    {\n      \"cdg_duuid\": \"ff6c8bde-b182-455f-86d7-650c78b5dac0\",\n      \"mapping_oper\": \"ADD_OPER\",\n      \"device_uuid\": [\n        \"b3982638-2c8a-4419-adfb-cd05b91bb1cc\"\n      ]\n    }\n  ],\n  \"user\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://198.18.201.25:30603/crosswork/inventory/v1/dg/devicemapping",
+							"protocol": "https",
+							"host": [
+								"198",
+								"18",
+								"201",
+								"25"
+							],
+							"port": "30603",
+							"path": [
+								"crosswork",
+								"inventory",
+								"v1",
+								"dg",
+								"devicemapping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

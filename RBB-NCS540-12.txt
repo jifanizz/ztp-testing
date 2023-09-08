@@ -1,0 +1,599 @@
+!! File saved at 14:28:33 EST Wed Feb 15 2023 by admin
+!! IOS XR Configuration 7.7.2
+!! Last configuration change at Thu Feb  9 18:33:03 2023 by admin
+!
+hostname RBB.NCS540.12
+clock timezone EST America/New_York
+logging trap informational
+logging events level informational
+logging format rfc5424
+logging console debugging
+logging monitor debugging
+logging facility local7
+logging 198.18.201.11 vrf Mgmt-intf
+logging 198.18.201.30 vrf Mgmt-intf port 9514
+logging source-interface MgmtEth0/RP0/CPU0/0
+logging hostnameprefix RBB.NCS540.12
+service timestamps log datetime msec show-timezone year
+service timestamps debug datetime msec
+domain name dcloud.cisco.com
+domain lookup disable
+domain vrf Mgmt-intf name-server 198.18.133.1
+domain vrf Mgmt-intf lookup source-interface MgmtEth0/RP0/CPU0/0
+username admin
+ group root-lr
+ group cisco-support
+ secret 10 $6$sss4v/CilSPg5v/.$kOtvMsg7jKHuFXWORzdbWVveieksweNlCN683vWddJxEU8w9D4ZgDr0fxKGFGoModwMctsbsxxaJudGpgh9Rv.
+!
+username nso
+ group root-lr
+ group cisco-support
+ secret 10 $6$0T2FN/5FIK2Z3N/.$o4exWh6boeJWYOwM0w2iV9UyeyKuK3gAd7mdV5mIVTBQCVVqC9Ooga/Ij5lOr1X5zqCiP9aDSgGcxb5DK5A8n1
+!
+aaa authorization exec default local
+aaa authentication login default local
+grpc
+ vrf Mgmt-intf
+ port 57400
+ no-tls
+ address-family ipv4
+!
+telemetry model-driven
+ destination-group DGroup1
+  vrf Mgmt-intf
+  address-family ipv4 198.18.201.18 port 57500
+   encoding self-describing-gpb
+   protocol grpc no-tls
+  !
+ !
+ sensor-group health
+  sensor-path Cisco-IOS-XR-shellutil-oper:system-time/uptime
+  sensor-path Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization
+  sensor-path Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary
+ !
+ sensor-group optics
+  sensor-path Cisco-IOS-XR-controller-optics-oper:optics-oper/optics-ports/optics-port/optics-info
+ !
+ sensor-group mpls-te
+  sensor-path Cisco-IOS-XR-mpls-te-oper:mpls-te/tunnels/summary
+  sensor-path Cisco-IOS-XR-ip-rsvp-oper:rsvp/interface-briefs/interface-brief
+  sensor-path Cisco-IOS-XR-ip-rsvp-oper:rsvp/counters/interface-messages/interface-message
+ !
+ sensor-group routing
+  sensor-path Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/statistics-global
+  sensor-path Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency
+  sensor-path Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/constdevrf/process-info
+  sensor-path Cisco-IOS-XR-ip-rib-ipv4-oper:rib/vrfs/vrf/afs/af/safs/saf/ip-rib-route-table-names/ip-rib-route-table-name/protocol/isis/as/information
+ !
+ sensor-group perf-mgmt
+  sensor-path Cisco-IOS-XR-perf-meas-oper:performance-measurement/nodes/node/interfaces/interface-details/interface-detail/delay-measurement-session/current-probe/probe-results
+ !
+ sensor-group interfaces
+  sensor-path Cisco-IOS-XR-pfi-im-cmd-oper:interfaces/interface-summary
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/data-rate
+  sensor-path Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters
+ !
+ sensor-group segment-routing
+  sensor-path Cisco-IOS-XR-infra-xtc-agent-oper:xtc/policy-summary
+  sensor-path Cisco-IOS-XR-infra-xtc-agent-oper:xtc/topology-summaries/topology-summary
+ !
+ sensor-group dataplane-monitor
+  sensor-path Cisco-IOS-XR-platforms-ofa-oper:ofa/stats/nodes/node
+ !
+ subscription health
+  sensor-group-id health strict-timer
+  sensor-group-id health sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription optics
+  sensor-group-id optics strict-timer
+  sensor-group-id optics sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription mpls-te
+  sensor-group-id mpls-te strict-timer
+  sensor-group-id mpls-te sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription routing
+  sensor-group-id routing strict-timer
+  sensor-group-id routing sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription perf-mgmt
+  sensor-group-id perf-mgmt strict-timer
+  sensor-group-id perf-mgmt sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription interfaces
+  sensor-group-id interfaces strict-timer
+  sensor-group-id interfaces sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription segment-routing
+  sensor-group-id segment-routing strict-timer
+  sensor-group-id segment-routing sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+ subscription dataplane-monitor
+  sensor-group-id dataplane-monitor strict-timer
+  sensor-group-id dataplane-monitor sample-interval 30000
+  destination-id DGroup1
+  source-interface MgmtEth0/RP0/CPU0/0
+ !
+!
+vrf Mgmt-intf
+ address-family ipv4 unicast
+ !
+ address-family ipv6 unicast
+ !
+!
+tpa
+ vrf Mgmt-intf
+  address-family ipv4
+   default-route mgmt
+   update-source dataports MgmtEth0/RP0/CPU0/0
+  !
+ !
+!
+line default
+ exec-timeout 10 0
+ width 107
+ length 37
+ absolute-timeout 0
+ session-limit 10
+ session-timeout 100
+ transport input ssh
+!
+vty-pool default 0 99 line-template default!
+snmp-server ifindex persist
+snmp-server trap link ietf
+snmp-server vrf Mgmt-intf
+ host 198.18.201.11 traps version 2c cisco123
+ host 198.18.201.30 traps version 2c cisco udp-port 1062
+!
+snmp-server user admin group1 v2c
+snmp-server community cisco RW
+snmp-server group group1 v2c
+snmp-server traps rf
+snmp-server traps bfd
+snmp-server traps ntp
+snmp-server traps copy-complete
+snmp-server traps snmp linkup
+snmp-server traps snmp linkdown
+snmp-server traps snmp coldstart
+snmp-server traps snmp warmstart
+snmp-server traps snmp authentication
+snmp-server traps flash removal
+snmp-server traps flash insertion
+snmp-server traps power
+snmp-server traps config
+snmp-server traps entity
+snmp-server traps selective-vrf-download role-change
+snmp-server traps syslog
+snmp-server traps system
+snmp-server traps bridgemib
+snmp-server traps addrpool low
+snmp-server traps addrpool high
+snmp-server traps cisco-entity-ext
+snmp-server traps entity-state operstatus
+snmp-server traps entity-state switchover
+snmp-server traps entity-redundancy all
+snmp-server traps entity-redundancy status
+snmp-server traps entity-redundancy switchover
+ntp
+ server vrf Mgmt-intf 198.18.128.1
+ source vrf Mgmt-intf MgmtEth0/RP0/CPU0/0
+ update-calendar
+!
+bfd
+ multipath include location 0/0/CPU0
+!
+ipv4 unnumbered mpls traffic-eng Loopback0
+call-home
+ vrf Mgmt-intf
+ service active
+ contact smart-licensing
+ source-interface MgmtEth0/RP0/CPU0/0
+ profile CiscoTAC-1
+  active
+  destination transport-method email disable
+  destination transport-method http
+ !
+!
+netconf-yang agent
+ ssh
+!
+!
+class-map match-any match-ef-exp5
+ description High priority, EF
+ match dscp 46 
+ match mpls experimental topmost 5 
+ end-class-map
+! 
+class-map match-any match-cs5-exp4
+ description Second highest priority
+ match dscp 40 
+ match mpls experimental topmost 4 
+ end-class-map
+! 
+class-map match-any match-cs6-exp6
+ description Highest priority control-plane traffic
+ match dscp cs6 
+ match mpls experimental topmost 6 
+ end-class-map
+! 
+class-map match-any match-video-cs4-exp2
+ description Video
+ match dscp 32 
+ match mpls experimental topmost 2 
+ end-class-map
+! 
+class-map match-any match-traffic-class-4
+ description "Match medium traffic-class 4"
+ match traffic-class 4 
+ end-class-map
+! 
+class-map match-any match-traffic-class-5
+ description "Match high priority traffic-class 5"
+ match traffic-class 5 
+ end-class-map
+! 
+class-map match-any match-traffic-class-6
+ description "Match video traffic-class 6"
+ match traffic-class 6 
+ end-class-map
+! 
+class-map match-any match-traffic-class-7
+ description "Match highest priority traffic-class 7"
+ match traffic-class 7 
+ end-class-map
+! 
+policy-map core-egress-queuing
+ class match-traffic-class-4
+  priority level 4 
+  queue-limit 500 us 
+ ! 
+ class match-traffic-class-5
+  priority level 3 
+  queue-limit 100 us 
+ ! 
+ class match-traffic-class-6
+  priority level 2 
+  queue-limit 500 us 
+ ! 
+ class match-traffic-class-7
+  priority level 1 
+  queue-limit 500 us 
+ ! 
+ class class-default
+  queue-limit 250 ms 
+ ! 
+ end-policy-map
+! 
+policy-map core-ingress-classifier
+ class match-cs6-exp6
+  set traffic-class 7
+  set mpls experimental imposition 6
+ ! 
+ class match-ef-exp5
+  set traffic-class 5
+  set mpls experimental imposition 5
+ ! 
+ class match-cs5-exp4
+  set traffic-class 4
+  set mpls experimental imposition 4
+ ! 
+ class match-video-cs4-exp2
+  set traffic-class 6
+  set mpls experimental imposition 2
+ ! 
+ class class-default
+  set mpls experimental imposition 0
+  set traffic-class 0
+  set dscp 0
+ ! 
+ end-policy-map
+! 
+flow exporter-map ccni
+ packet-length 1468
+ version v9
+  options sampler-table timeout 15
+  template data timeout 15
+  template options timeout 15
+ !
+ transport udp 2055
+ source MgmtEth0/RP0/CPU0/0
+ destination 198.18.200.46 vrf Mgmt-intf
+!
+flow monitor-map ccni
+ record ipv4
+ exporter ccni
+ cache entries 1000000
+ cache timeout active 12
+ cache timeout update 15
+!
+flow monitor-map ccni-ipv6
+ record ipv6
+ exporter ccni
+ cache entries 1000000
+ cache timeout active 12
+ cache timeout update 15
+!
+sampler-map ccni-sampler
+ random 1 out-of 1000
+!
+interface Loopback0
+ ipv4 address 1.1.1.12 255.255.255.255
+ ipv6 address 12:12:12::12/128
+!
+interface MgmtEth0/RP0/CPU0/0
+ vrf Mgmt-intf
+ ipv4 address {$IP_ADDRESS} 255.255.255.0
+!
+interface HundredGigE0/0/1/0
+ description *** To RBB.NCS540.11 HundredGigE0/0/0/28 ***
+ mtu 9192
+ service-policy input core-ingress-classifier
+ service-policy output core-egress-queuing
+ ipv4 address 10.11.12.1 255.255.255.254
+ ipv6 address 2001::10:11:12:1/127
+ load-interval 30
+ flow ipv4 monitor ccni sampler ccni-sampler ingress
+ flow ipv6 monitor ccni-ipv6 sampler ccni-sampler ingress
+ dampening
+!
+interface HundredGigE0/0/1/1
+ description *** To RBB.NCS540.13 HundredGigE0/0/1/0 ***
+ mtu 9192
+ service-policy input core-ingress-classifier
+ service-policy output core-egress-queuing
+ ipv4 address 10.12.13.0 255.255.255.254
+ ipv6 address 2001::10:12:13:0/127
+ load-interval 30
+ flow ipv4 monitor ccni sampler ccni-sampler ingress
+ flow ipv6 monitor ccni-ipv6 sampler ccni-sampler ingress
+ dampening
+!
+!
+route-policy pass-all
+  pass
+end-policy
+!
+router static
+ vrf Mgmt-intf
+  address-family ipv4 unicast
+   0.0.0.0/0 198.18.200.1
+  !
+ !
+!
+router isis RTP_LAB
+ set-overload-bit on-startup 300
+ is-type level-2-only
+ net 49.0010.0000.0000.0012.00
+ distribute link-state
+ nsf ietf
+ log adjacency changes
+ lsp-gen-interval initial-wait 20 secondary-wait 200 maximum-wait 10000 level 2
+ lsp-refresh-interval 65000
+ max-lsp-lifetime 65535
+ address-family ipv4 unicast
+  metric-style wide
+  metric 100 level 2
+  microloop avoidance segment-routing
+  mpls traffic-eng level-2-only
+  mpls traffic-eng router-id Loopback0
+  spf-interval initial-wait 50 secondary-wait 200 maximum-wait 2000
+  router-id Loopback0
+  redistribute connected
+  segment-routing mpls
+ !
+ address-family ipv6 unicast
+  metric-style wide
+  microloop avoidance segment-routing
+  spf-interval initial-wait 50 secondary-wait 200 maximum-wait 2000
+  segment-routing mpls
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+   prefix-sid index 12
+  !
+  address-family ipv6 unicast
+  !
+ !
+ interface HundredGigE0/0/1/0
+  circuit-type level-2-only
+  bfd minimum-interval 20
+  bfd multiplier 3
+  bfd fast-detect ipv4
+  point-to-point
+  address-family ipv4 unicast
+   fast-reroute per-prefix
+   fast-reroute per-prefix tiebreaker node-protecting index 100
+   fast-reroute per-prefix ti-lfa level 2
+   metric 200 level 2
+  !
+  address-family ipv6 unicast
+   fast-reroute per-prefix
+   fast-reroute per-prefix tiebreaker node-protecting index 100
+   fast-reroute per-prefix ti-lfa level 2
+   metric 200 level 2
+  !
+ !
+ interface HundredGigE0/0/1/1
+  circuit-type level-2-only
+  bfd minimum-interval 20
+  bfd multiplier 3
+  bfd fast-detect ipv4
+  point-to-point
+  address-family ipv4 unicast
+   fast-reroute per-prefix
+   fast-reroute per-prefix tiebreaker node-protecting index 100
+   fast-reroute per-prefix ti-lfa level 2
+   metric 200 level 2
+  !
+  address-family ipv6 unicast
+   fast-reroute per-prefix
+   fast-reroute per-prefix tiebreaker node-protecting index 100
+   fast-reroute per-prefix ti-lfa level 2
+   metric 200 level 2
+  !
+ !
+!
+router bgp 65000
+ nsr
+ bfd minimum-interval 6500
+ bfd multiplier 7
+ bgp router-id 1.1.1.12
+ address-family ipv4 unicast
+ !
+ address-family vpnv4 unicast
+ !
+ address-family ipv6 unicast
+ !
+ address-family vpnv6 unicast
+ !
+ address-family ipv4 rt-filter
+ !
+ address-family l2vpn evpn
+ !
+ neighbor-group CWDG_PEER
+  remote-as 65001
+  ebgp-multihop 255
+  update-source Loopback0
+  address-family ipv4 unicast
+   route-policy pass-all out
+  !
+ !
+ neighbor-group EBGP_PEERS
+  address-family ipv4 unicast
+   route-policy pass-all in
+   route-policy pass-all out
+  !
+ !
+ neighbor-group ROUTE_REFLECTORS
+  remote-as 65000
+  bfd fast-detect
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+  address-family vpnv4 unicast
+  !
+  address-family ipv6 unicast
+  !
+  address-family vpnv6 unicast
+  !
+  address-family l2vpn evpn
+  !
+ !
+ neighbor 1.1.1.50
+  use neighbor-group ROUTE_REFLECTORS
+ !
+ neighbor 1.1.1.51
+  use neighbor-group ROUTE_REFLECTORS
+ !
+ neighbor 10.200.200.46
+  use neighbor-group CWDG_PEER
+ !
+!
+mpls oam
+ dpm
+  pps 10
+  interval 60
+ !
+!
+mpls traffic-eng
+!
+segment-routing
+ global-block 100000 140000
+ traffic-eng
+  interface HundredGigE0/0/1/0
+   metric 120
+  !
+  interface HundredGigE0/0/1/1
+   metric 120
+  !
+  pcc
+   source-address ipv4 1.1.1.12
+   pce address ipv4 1.1.1.50
+    precedence 1
+   !
+   pce address ipv4 1.1.1.51
+    precedence 2
+   !
+   report-all
+   redundancy pcc-centric
+  !
+ !
+!
+xml agent tty
+!
+netconf agent tty
+!
+lldp
+!
+crypto ca trustpoint Trustpool
+ crl optional
+!
+crypto ca trustpoint system-trustpoint
+ keypair rsa system-enroll-key
+ ca-keypair rsa system-root-key
+ ip-address 1.1.1.12
+ subject-name CN=cisco.com
+ enrollment url self
+ lifetime certificate 3650
+ message-digest sha256
+ lifetime ca-certificate 3650
+!
+ssh client vrf Mgmt-intf
+ssh server logging
+ssh timeout 120
+ssh server rate-limit 600
+ssh server session-limit 100
+ssh server v2
+ssh server vrf Mgmt-intf
+ssh server netconf vrf Mgmt-intf
+performance-measurement
+ interface HundredGigE0/0/1/0
+  delay-measurement
+  !
+ !
+ interface HundredGigE0/0/1/1
+  delay-measurement
+  !
+ !
+ delay-profile interfaces default
+  advertisement
+   accelerated
+    threshold 25
+   !
+   periodic
+    interval 120
+    threshold 10
+   !
+  !
+  probe
+   measurement-mode two-way
+   protocol twamp-light
+   computation-interval 60
+  !
+ !
+ protocol twamp-light
+  measurement delay
+   unauthenticated
+    querier-dst-port 12345
+   !
+  !
+ !
+!
+hw-module profile segment-routing srv6 mode micro-segment format f3216
+!
+end
