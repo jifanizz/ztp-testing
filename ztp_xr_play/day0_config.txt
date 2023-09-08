@@ -1,0 +1,45 @@
+!! IOS XR
+!
+hostname {$HOSTNAME}
+!
+username admin
+ group root-lr
+ group cisco-support
+ secret 10 $6$q7q86/Wh0GfU26/.$95dJmL5Nv9L2K.Egs.cULuN2Y.Ao/EAW6IECOSGY62ze2mBR/wRmhFW5HdVsyBgWpYWnDRRtINXshcCbVuffG1
+!
+aaa authorization exec default local
+aaa authentication login default local
+!
+snmp-server user admin group1 v2c
+snmp-server community cisco RW
+snmp-server group group1 v2c
+!
+netconf-yang agent
+ ssh
+!
+interface MgmtEth0/RP0/CPU0/0
+ ipv4 address {$IP_ADDRESS} 255.255.255.0
+ no shutdown
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 198.18.200.1
+ !
+!
+netconf agent tty
+!
+ssh server rate-limit 600
+ssh server session-limit 100
+ssh server v2
+ssh server netconf vrf default
+!
+line default
+ exec-timeout 0 0
+ width 107
+ length 37
+ absolute-timeout 0
+ transport input ssh
+!
+vty-pool default 0 99 line-template default
+!
+end
